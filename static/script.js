@@ -2,6 +2,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameBoard = document.getElementById('game-board');
     const resetButton = document.getElementById('reset-button');
 
+    // API helper functions
+    async function recordMove() {
+        try {
+            await fetch('/move', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.warn('Failed to record move:', error);
+        }
+    }
+
+    async function recordGameStart() {
+        try {
+            await fetch('/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.warn('Failed to record game start:', error);
+        }
+    }
+
     let board = [
         [null, null, null, null],
         [null, null, null, null],
@@ -126,7 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        if (moved) addRandomTile();
+        if (moved) {
+            addRandomTile();
+            recordMove(); // Track the move
+        }
 
         if (isGameOver()) {
             alert("Game Over!");
@@ -143,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         gameBoard.innerHTML = '';
         addRandomTile();
         addRandomTile();
+        recordGameStart(); // Track the game start
     }
 
     document.addEventListener('keydown', (event) => {
