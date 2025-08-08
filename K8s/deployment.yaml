@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-2048
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-2048
+  template:
+    metadata:
+      labels:
+        app: flask-2048
+    spec:
+      containers:
+        - name: flask-2048
+          image: roshdwivedi/flask-2048
+          ports:
+            - containerPort: 5000
