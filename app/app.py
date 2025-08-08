@@ -36,13 +36,22 @@ def create_app():
         """Serve the main game page."""
         logger.info("Serving main game page")
         return render_template('index.html')
+    @app.route("/health")
+    def health():
+        return "OK", 200
     
     @app.errorhandler(404)
     def not_found(error):
         """Handle 404 errors."""
         logger.warning(f"404 error: {error}")
         return render_template('index.html'), 404
-    
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        """Handle 400 errors."""
+        logger.warning(f"400 error: {error}")
+        return {'error': 'Bad request'}, 400
+
     @app.errorhandler(500)
     def internal_error(error):
         """Handle 500 errors."""
